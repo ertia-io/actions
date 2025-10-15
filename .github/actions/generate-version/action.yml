@@ -1,0 +1,22 @@
+name: 'Generate Version'
+description: 'Generate semantic version for OCI tag'
+outputs:
+  version:
+    description: "Semver and OCI compatible version"
+    value: ${{ steps.version-generator.outputs.version }}
+runs:
+  using: "composite"
+  steps:
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+
+    - name: Version Generator
+      id: version-generator
+      run: |
+        generated_version=$(generate_version.sh)
+        echo "version=$generated_version" >> $GITHUB_OUTPUT
+      shell: bash
+

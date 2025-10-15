@@ -1,0 +1,43 @@
+name: 'Build and Push OCI'
+description: 'Build and push OCI artifacts'
+inputs:
+  oci-registry:
+    description: 'Base OCI registry'
+    required: true
+  version-tag:
+    description: 'Version tag to use for pushed artifacts'
+    required: true
+  app-name:
+    description: 'Name of the app (will be used in artifact name)'
+    required: true
+  dockerfile-path:
+    description: 'Path to the Dockerfile (if any)'
+    required: false
+  helm-chart-path:
+    description: 'Path to the Helm Chart (if any)'
+    required: false
+  flux-bundle-path:
+    description: 'Path to the Flux bundle (if any)'
+    required: false
+runs:
+  using: "composite"
+  steps:
+    - name: Set GitHub Path
+      run: echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell: bash
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+
+    - name: Build and Push
+      id: build-and-push
+      run: |
+        build_and_push.sh
+      shell: bash
+      env:
+        OCI_REGISTRY: ${{ inputs.oci-registry }}
+        VERSION: ${{ inputs.version-tag }}
+        APP_NAME: ${{ inputs.app-name }}
+        DOCKERFILE_PATH: ${{ inputs.dockerfile-path }}
+        HELM_CHART_PATH: ${{ inputs.helm-chart-path }}
+        FLUX_BUNDLE_PATH: ${{ inputs.flux-bundle-path }}
+

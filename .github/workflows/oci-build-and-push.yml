@@ -1,0 +1,85 @@
+name: oci-build-and-push
+
+on:
+  workflow_call:
+    inputs:
+      app-name:
+        required: true
+        type: string
+        default: "${{ github.event.repository.name }}"
+      oci-registry:
+        required: true
+        type: string
+        default: "oci://ghcr.io/${{ github.repository_owner }}"
+      dockerfile-path:
+        required: false
+        type: string
+      helm-chart-dir:
+        required: false
+        type: string
+      flux-bundle-dir:
+        required: false
+        type: string
+      registry-username:
+        required: true
+        type: string
+        default: ${{ github.actor }}
+    secrets:
+      registry-password:
+        required: true
+        type: string
+
+env:
+  #APP_NAME: "${{ github.event.repository.name }}"
+  #OCI_REGISTRY: "oci://ghcr.io/${{ github.repository_owner }}"
+  APP_NAME: "${{ inputs.app-name }}"
+  OCI_REGISTRY: "${{ inputs.oci-registry }}"
+
+jobs:
+  OCI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Generate Version
+        id: semver
+        if: ${{ github.event_name != 'release' }}
+        uses: ertia-io/actions/.github/actions/generate-version@${{ github.workflow_sha }}
+
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@main
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ inputs.registry-username }}
+          #password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ inputs.registry-password }}
+
+      - name: Build and push dev artifacts
+        uses: ertia-io/actions/.github/actions/oci-build-and-push@${{ github.workflow_sha }}
+        if: ${{ github.event_name != 'release' }}
+        with:
+          app-name: ${{ env.APP_NAME }}
+          oci-registry: ${{ env.OCI_REGISTRY }}
+          dockerfile-path: ${{ inputs.dockerfile-path }}"
+          helm-chart-path: "${{ inputs.helm-chart-dir }}/${{ env.APP_NAME }}"
+          flux-bundle-path: "${{ inputs.flux-bundle-dir }}/${{ env.APP_NAME }}"
+          version-tag: ${{ steps.semver.outputs.version }}
+
+      - name: Build and push release artifacts
+        uses: ertia-io/actions/.github/actions/oci-build-and-push@${{ github.workflow_sha }}
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+        with:
+          app-name: ${{ env.APP_NAME }}
+          oci-registry: ${{ env.OCI_REGISTRY }}
+          dockerfile-path: ${{ inputs.dockerfile-path }}"
+          helm-chart-path: "${{ inputs.helm-chart-dir }}/${{ env.APP_NAME }}"
+          flux-bundle-path: "${{ inputs.flux-bundle-dir }}/${{ env.APP_NAME }}"
+          version-tag: ${{ github.event.release.tag_name }}
+
