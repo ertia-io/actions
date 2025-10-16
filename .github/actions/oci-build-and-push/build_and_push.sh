@@ -30,18 +30,13 @@ for tool in docker helm flux git; do
     fi
 done
 
-
-#DOCKERFILE_PATH=$(yq '.dockerfile // ""' .ertia/app.yaml)
-#HELM_CHART_PATH=$(yq '.helm_chart // ""' .ertia/app.yaml)
-#FLUX_BUNDLE_PATH=$(yq '.flux_bundle // ""' .ertia/app.yaml)
-#BUILD_DIR=$(yq '.build_dir // ".ertia/build"' .ertia/app.yaml)
-
 echo "App: $APP_NAME"
 echo "Registry: $OCI_REGISTRY"
 echo "Version: $VERSION"
 echo ""
 
 # Create build directories
+BUILD_DIR="./cicd-oci-build"
 mkdir -p "${BUILD_DIR}"/{chart,flux}
 
 # Get git info for flux
