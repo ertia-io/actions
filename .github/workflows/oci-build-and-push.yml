@@ -24,6 +24,10 @@ on:
         required: true
         type: string
         default: ${{ github.actor }}
+      helm-dependency-update:
+        required: false
+        type: bool
+        default: true
     secrets:
       registry-password:
         required: true
@@ -56,6 +60,13 @@ jobs:
           registry: ghcr.io
           username: ${{ inputs.registry-username }}
           password: ${{ inputs.registry-password }}
+
+      - name: Helm dependency update
+        if: ${{ inputs.helm-dependency-update && helm-chart-dir != '' }}
+        run: |
+          helm dependency update ${CHART_PATH}
+        env:
+          CHART_PATH: "${{ inputs.helm-chart-dir }}/${{ inputs.app-name }}"
 
       - name: Build and push dev artifacts
         uses: ertia-io/actions/.github/actions/oci-build-and-push@main
