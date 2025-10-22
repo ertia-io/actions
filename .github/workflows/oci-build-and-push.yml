@@ -87,7 +87,7 @@ jobs:
           oci-registry: "${{ inputs.oci-registry }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
           helm-chart-path: "${{ inputs.helm-chart-dir }}/${{ inputs.app-name }}"
-          flux-bundle-path: "${{ inputs.flux-bundle-dir }}/${{ inputs.app-name }}"
+          flux-bundle-path: "${{ inputs.flux-bundle-dir }}"
           version-tag: "${{ steps.semver.outputs.version }}"
 
       - name: Build and push release artifacts
@@ -98,6 +98,6 @@ jobs:
           oci-registry: "${{ inputs.oci-registry }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
           helm-chart-path: "${{ inputs.helm-chart-dir }}/${{ inputs.app-name }}"
-          flux-bundle-path: "${{ inputs.flux-bundle-dir }}/${{ inputs.app-name }}"
+          flux-bundle-path: "${{ inputs.flux-bundle-dir }}"
           version-tag: "${{ github.event.release.tag_name }}"
 
