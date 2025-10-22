@@ -83,21 +83,21 @@ jobs:
         uses: ertia-io/actions/.github/actions/oci-build-and-push@main
         if: ${{ github.event_name != 'release' }}
         with:
-          app-name: ${{ inputs.app-name }}
-          oci-registry: ${{ inputs.oci-registry }}
-          dockerfile-path: ${{ inputs.dockerfile-path }}"
+          app-name: "${{ inputs.app-name }}"
+          oci-registry: "${{ inputs.oci-registry }}"
+          dockerfile-path: "${{ inputs.dockerfile-path }}"
           helm-chart-path: "${{ inputs.helm-chart-dir }}/${{ inputs.app-name }}"
           flux-bundle-path: "${{ inputs.flux-bundle-dir }}/${{ inputs.app-name }}"
-          version-tag: ${{ steps.semver.outputs.version }}
+          version-tag: "${{ steps.semver.outputs.version }}"
 
       - name: Build and push release artifacts
         uses: ertia-io/actions/.github/actions/oci-build-and-push@main
         if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
         with:
-          app-name: ${{ inputs.app-name }}
-          oci-registry: ${{ inputs.oci-registry }}
-          dockerfile-path: ${{ inputs.dockerfile-path }}"
+          app-name: "${{ inputs.app-name }}"
+          oci-registry: "${{ inputs.oci-registry }}"
+          dockerfile-path: "${{ inputs.dockerfile-path }}"
           helm-chart-path: "${{ inputs.helm-chart-dir }}/${{ inputs.app-name }}"
           flux-bundle-path: "${{ inputs.flux-bundle-dir }}/${{ inputs.app-name }}"
-          version-tag: ${{ github.event.release.tag_name }}
+          version-tag: "${{ github.event.release.tag_name }}"
 
