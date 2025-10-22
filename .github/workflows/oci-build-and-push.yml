@@ -66,14 +66,14 @@ jobs:
           password: ${{ inputs.registry-password }}
 
       - name: Helm dependency update
-        if: ${{ inputs.helm-dependency-update && helm-chart-dir != '' }}
+        if: ${{ inputs.helm-dependency-update && inputs.helm-chart-dir != '' }}
         run: |
           helm dependency update ${CHART_PATH}
         env:
           CHART_PATH: "${{ inputs.helm-chart-dir }}/${{ inputs.app-name }}"
 
       - name: Helm dependency build
-        if: ${{ inputs.helm-dependency-build && helm-chart-dir != '' }}
+        if: ${{ inputs.helm-dependency-build && inputs.helm-chart-dir != '' }}
         run: |
           helm dependency build ${CHART_PATH}
         env:
