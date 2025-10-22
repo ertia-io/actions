@@ -63,7 +63,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ inputs.registry-username }}
-          password: ${{ inputs.registry-password }}
+          password: ${{ secrets.registry-password }}
 
       - name: Helm dependency update
         if: ${{ inputs.helm-dependency-update && inputs.helm-chart-dir != '' }}
