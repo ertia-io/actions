@@ -26,11 +26,11 @@ on:
         default: ${{ github.actor }}
       helm-dependency-update:
         required: false
-        type: bool
+        type: boolean
         default: false
       helm-dependency-build:
         required: false
-        type: bool
+        type: boolean
         default: true
     secrets:
       registry-password:
