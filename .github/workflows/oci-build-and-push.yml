@@ -10,7 +10,7 @@ on:
       oci-registry:
         required: false
         type: string
-        default: "oci://ghcr.io/${{ github.repository_owner }}"
+        default: "ghcr.io/${{ github.repository_owner }}"
       dockerfile-path:
         required: false
         type: string
