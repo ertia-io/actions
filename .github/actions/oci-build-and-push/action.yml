@@ -33,6 +33,7 @@ runs:
       run: |
         build_and_push.sh
       shell: bash
+      working-directory: ${{ github.workspace }}
       env:
         OCI_REGISTRY: ${{ inputs.oci-registry }}
         VERSION: ${{ inputs.version-tag }}
