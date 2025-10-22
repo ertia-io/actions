@@ -4,11 +4,11 @@ on:
   workflow_call:
     inputs:
       app-name:
-        required: true
+        required: false
         type: string
         default: "${{ github.event.repository.name }}"
       oci-registry:
-        required: true
+        required: false
         type: string
         default: "oci://ghcr.io/${{ github.repository_owner }}"
       dockerfile-path:
@@ -21,7 +21,7 @@ on:
         required: false
         type: string
       registry-username:
-        required: true
+        required: false
         type: string
         default: ${{ github.actor }}
       helm-dependency-update:
