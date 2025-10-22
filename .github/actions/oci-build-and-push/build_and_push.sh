@@ -64,7 +64,8 @@ else
 fi
 
 # Build and push Helm chart (if configured)
-if [[ -n "$HELM_CHART_PATH" ]]; then
+if [[ -n "$HELM_CHART_PARENT_DIR" ]]; then
+    HELM_CHART_PATH="${HELM_CHART_PARENT_DIR}/${APP_NAME}"
     echo "⚓ Linting Helm chart: $HELM_CHART_PATH"
     helm lint "$HELM_CHART_PATH"
 
