@@ -10,17 +10,17 @@ set -Eeuo pipefail
 # Important to note is that the versions generated are not true 'pre-releases', since
 # they use the last tag, which is not indicative of the 'next' release.
 # However, as long as one is aware that all pre-releases where the first part ends
-# with 'DEV' are dev versions and not pre-releases, this will not be a problem.
+# with 'CICD' are dev versions and not pre-releases, this will not be a problem.
 #
 # For a typical dev build on a branch named 'feat/coolthing' where the last release
 # was 'v0.1.0', the final version will look like this:
 #
-#   v0.1.0-DEV.20250425112514.feat-coolthing.11.sha-3805d7d
+#   v0.1.0-CICD.20250425112514.feat-coolthing.11.sha-3805d7d
 #
 # This makes it easy to select the type of release/build you want:
 #   E.g. when using Flux, one can use the 'semver' range ">= v0.0.0-0"
 #   to select any pre-release.
-#   Then set the 'semverFilter' to ".*-DEV[.][0-9]+[.]feet-coolthing[.].*$"
+#   Then set the 'semverFilter' to ".*-CICD[.][0-9]+[.]feet-coolthing[.].*$"
 #   This will ensure that you always get upgraded to the latest build for
 #   your branch.
 #
@@ -71,7 +71,7 @@ timestamp=$(date '+%F%T' | tr -d ':-')
 
 # The short sha is prefixed with 'sha-' to prevent invalid version parts, which can
 # occur when the sha starts with a zero (0).
-final_version=$(printf "%s-DEV.%s.%s.%s.sha-%s" "$last_tag" "$timestamp" "$escaped_branch" "$commits_since_last_tag" "$short_sha")
+final_version=$(printf "%s-CICD.%s.%s.%s.sha-%s" "$last_tag" "$timestamp" "$escaped_branch" "$commits_since_last_tag" "$short_sha")
 
 echo "$final_version"
 
