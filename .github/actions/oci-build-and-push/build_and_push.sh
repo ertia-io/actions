@@ -22,7 +22,7 @@ if [[ -z "${APP_NAME:-}" ]]; then
     exit 1
 fi
 
-if [[ -z "${DOCKER_CONTEXT:-}" ]]; then
+if [[ -z "${DOCKER_CONTEXT_PATH:-}" ]]; then
     echo "Error: DOCKER_CONTEXT environment variable required"
     exit 1
 fi
@@ -55,7 +55,7 @@ IMAGE_TAG="${APP_NAME}:${VERSION}"
 # Build and push Docker image (if configured)
 if [[ -n "$DOCKERFILE_PATH" ]]; then
     echo "🐳 Building Docker image: $IMAGE_TAG"
-    docker build -f "$DOCKERFILE_PATH" -t "$IMAGE_TAG" .
+    docker build -f "$DOCKERFILE_PATH" -t "$IMAGE_TAG" "$DOCKER_CONTEXT_PATH"
 
     echo "📤 Pushing Docker image..."
     FULL_IMAGE_TAG="${OCI_REGISTRY}/images/${IMAGE_TAG}"

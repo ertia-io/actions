@@ -42,7 +42,7 @@ runs:
         VERSION: ${{ inputs.version-tag }}
         APP_NAME: ${{ inputs.app-name }}
         DOCKERFILE_PATH: ${{ inputs.dockerfile-path }}
-        DOCKER_CONTEXT: ${{ inputs.docker-context }}
+        DOCKER_CONTEXT_PATH: ${{ inputs.docker-context }}
         HELM_CHART_PARENT_DIR: ${{ inputs.helm-chart-parent-dir }}
         FLUX_BUNDLE_PATH: ${{ inputs.flux-bundle-path }}
 
