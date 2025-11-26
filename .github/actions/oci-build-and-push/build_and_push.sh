@@ -22,6 +22,11 @@ if [[ -z "${APP_NAME:-}" ]]; then
     exit 1
 fi
 
+if [[ -z "${DOCKER_CONTEXT:-}" ]]; then
+    echo "Error: DOCKER_CONTEXT environment variable required"
+    exit 1
+fi
+
 # Check required tools
 for tool in docker helm flux git; do
     if ! command -v "$tool" >/dev/null 2>&1; then

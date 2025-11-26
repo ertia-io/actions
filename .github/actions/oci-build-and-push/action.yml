@@ -13,6 +13,9 @@ inputs:
   dockerfile-path:
     description: 'Path to the Dockerfile (if any)'
     required: false
+  docker-context:
+    description: 'Path to the Docker context dir'
+    required: true
   helm-chart-parent-dir:
     description: 'Path to the Helm Chart parent dir (if any)'
     required: false
@@ -39,6 +42,7 @@ runs:
         VERSION: ${{ inputs.version-tag }}
         APP_NAME: ${{ inputs.app-name }}
         DOCKERFILE_PATH: ${{ inputs.dockerfile-path }}
+        DOCKER_CONTEXT: ${{ inputs.docker-context }}
         HELM_CHART_PARENT_DIR: ${{ inputs.helm-chart-parent-dir }}
         FLUX_BUNDLE_PATH: ${{ inputs.flux-bundle-path }}
 

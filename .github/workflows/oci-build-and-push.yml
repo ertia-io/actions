@@ -14,6 +14,10 @@ on:
       dockerfile-path:
         required: false
         type: string
+      docker-context:
+        required: false
+        type: string
+        default: "."
       helm-chart-dir:
         required: false
         type: string
@@ -86,6 +90,7 @@ jobs:
           app-name: "${{ inputs.app-name }}"
           oci-registry: "${{ inputs.oci-registry }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
+          docker-context: "${{ inputs.docker-context }}"
           helm-chart-parent-dir: "${{ inputs.helm-chart-dir }}"
           flux-bundle-path: "${{ inputs.flux-bundle-dir }}"
           version-tag: "${{ steps.semver.outputs.version }}"
@@ -97,6 +102,7 @@ jobs:
           app-name: "${{ inputs.app-name }}"
           oci-registry: "${{ inputs.oci-registry }}"
           dockerfile-path: "${{ inputs.dockerfile-path }}"
+          docker-context: "${{ inputs.docker-context }}"
           helm-chart-parent-dir: "${{ inputs.helm-chart-dir }}"
           flux-bundle-path: "${{ inputs.flux-bundle-dir }}"
           version-tag: "${{ github.event.release.tag_name }}"
