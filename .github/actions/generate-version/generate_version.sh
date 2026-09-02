@@ -71,7 +71,7 @@ timestamp=$(date '+%F%T' | tr -d ':-')
 
 # The short sha is prefixed with 'sha-' to prevent invalid version parts, which can
 # occur when the sha starts with a zero (0).
-final_version=$(printf "%s-CICD.%s.%s.%s.sha-%s" "$last_tag" "$timestamp" "$escaped_branch" "$commits_since_last_tag" "$short_sha")
+final_version=$(printf "%s-DEV.%s.%s.%s.sha-%s" "$last_tag" "$timestamp" "$escaped_branch" "$commits_since_last_tag" "$short_sha")
 
 echo "$final_version"
 
