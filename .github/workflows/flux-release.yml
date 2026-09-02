@@ -1,0 +1,53 @@
+name: flux-release
+
+on:
+  workflow_call:
+
+env:
+  OCI_REPO: "oci://ghcr.io/${{ github.repository_owner }}/flux/${{ github.event.repository.name }}"
+
+jobs:
+  OCI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Generate Version
+        id: semver
+        if: ${{ github.event_name != 'release' }}
+        uses: ertia-io/actions/.github/actions/generate-version@main
+
+      - name: Setup Flux CLI
+        uses: fluxcd/flux2/action@1fd61a06264d71cf445ed55c4f14d401d26a1c64 # v2.8.8
+
+      - name: Login to GHCR
+        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push manifests
+        if: ${{ github.event_name != 'release' }}
+        run: |
+          current_branch="$(git branch --show-current)"
+          git_short_sha=$(git rev-parse --short HEAD)
+
+          flux push artifact $OCI_REPO:$git_short_sha \
+            --path="./bundle" \
+            --source="$(git config --get remote.origin.url)" \
+            --revision="${current_branch}@sha1:$(git rev-parse HEAD)"
+          flux tag artifact $OCI_REPO:$git_short_sha --tag "$DEV_VERSION"
+        env:
+          DEV_VERSION: ${{ steps.semver.outputs.version }}
+
+      - name: Tag release
+        if: ${{ github.event_name == 'release' && github.event.action == 'published' }}
+        run: |
+          flux tag artifact $OCI_REPO:$(git rev-parse --short HEAD) --tag "$RELEASE_TAG"
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
